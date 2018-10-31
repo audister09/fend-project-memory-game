@@ -39,9 +39,22 @@ function shuffle(array) {
  */
 
 const allCards = document.querySelectorAll('.card');
+const openCards = [];
 
 allCards.forEach(function(card) {
-  card.addEventListener('click', function(e) {
-    card.classList.add('open', 'show');
-  });
-});
+      card.addEventListener('click', function(e) {
+          openCards.push(card);
+          card.classList.add('open', 'show');
+          console.log('Open Cards:', openCards.length);
+
+          if (openCards.length == 2) {
+            setTimeout(function() {
+                openCards.forEach(function(card) {
+                  card.classList.remove('open', 'show');
+                });
+
+                openCards = [];
+              }, 500);
+            }
+          });
+      });
