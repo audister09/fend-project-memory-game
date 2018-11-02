@@ -2,7 +2,19 @@
  * Create a list that holds all of your cards
  */
 
+const cards = ['fa-diamond', 'fa-diamond',
+  'fa-paper-plane-o', 'fa-paper-plane-o',
+  'fa-anchor', 'fa-anchor',
+  'fa-bolt', 'fa-bolt',
+  'fa-cube', 'fa-cube',
+  'fa-leaf', 'fa-leaf',
+  'fa-bicycle', 'fa-bicycle',
+  'fa-bomb', 'fa-bomb',
+];
 
+function produceCard(card) {
+  return `<li class="card" data-cards="${card}"><i class="fa ${card}"></i></li>`;
+}
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -12,7 +24,7 @@
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-  var currentIndex = array.length,
+  let currentIndex = array.length,
     temporaryValue, randomIndex;
 
   while (currentIndex !== 0) {
@@ -38,23 +50,52 @@ function shuffle(array) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
-const allCards = document.querySelectorAll('.card');
-const openCards = [];
+function triggerGame() {
+  let deck = document.querySelector('.deck')
+  let cardHTML = shuffle(cards).map(function(card) {
+    return produceCard(card);
+  });
+
+  deck.innerHTML = cardHTML.join('');
+}
+
+triggerGame();
+
+let allCards = document.querySelectorAll('.card');
+let openCards = [];
 
 allCards.forEach(function(card) {
-      card.addEventListener('click', function(e) {
-          openCards.push(card);
-          card.classList.add('open', 'show');
-          console.log('Open Cards:', openCards.length);
+  card.addEventListener('click', function(e) {
 
-          if (openCards.length == 2) {
-            setTimeout(function() {
-                openCards.forEach(function(card) {
-                  card.classList.remove('open', 'show');
-                });
+    if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match')) {
+      openCards.push(card);
+      card.classList.add('open', 'show');
 
-                openCards = [];
-              }, 500);
-            }
-          });
-      });
+      //If cards match, leave cards open
+      if (openCards.length == 2) {
+        if (openCards[0].dataset.card == openCards[1].dataset.card) {
+            console.log('This is a match');
+          openCards[0].classList.add('match');
+          openCards[0].classList.add('open');
+          openCards[0].classList.add('show');
+
+          openCards[1].classList.add('match');
+          openCards[1].classList.add('open');
+          openCards[1].classList.add('show');
+
+          openCards = [];
+        }
+        else {
+          //If cards do not match, close cards
+          setTimeout(function() {
+            openCards.forEach(function(card) {
+              card.classList.remove('open', 'show');
+            });
+
+            openCards = [];
+          }, 1000);
+        }
+      }
+    }
+  });
+});
