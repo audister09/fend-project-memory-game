@@ -20,14 +20,14 @@ let matchedTiles = [];
  * Layout the tiles
  */
 function initGame() {
+  // // Variable for shuffled cards
+  let mixTiles = shuffle(tiles);
+  
   for (let i = 0; i < tiles.length; i++) {
     const card = document.createElement('li');
     card.classList.add('card');
     card.innerHTML = `<i class='fa ${tiles[i]}'></i>`;
     cardsContainer.appendChild(card);
-
-    // Variable for shuffled cards
-  	let mixCards = shuffle(tiles);
 
     //Add click event each tiles
     click(card);
@@ -99,7 +99,7 @@ function compare(presentTile, previousTile) {
  */
 function gameOver() {
   if (matchedTiles.length === tiles.length) {
-    alert('GAME OVER, MAN!')
+    alert('Game over, man!')
   }
 }
 
