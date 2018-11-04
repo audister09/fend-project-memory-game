@@ -1,8 +1,7 @@
 /*
  * Create a list that holds all of your cards
  */
-
-const cards = ['fa-diamond', 'fa-diamond',
+const tiles = ['fa-diamond', 'fa-diamond',
   'fa-paper-plane-o', 'fa-paper-plane-o',
   'fa-anchor', 'fa-anchor',
   'fa-bolt', 'fa-bolt',
@@ -12,9 +11,133 @@ const cards = ['fa-diamond', 'fa-diamond',
   'fa-bomb', 'fa-bomb',
 ];
 
-function produceCard(card) {
-  return `<li class="card" data-cards="${card}"><i class="fa ${card}"></i></li>`;
+const cardsContainer = document.querySelector('.deck');
+
+let flippedTiles = [];
+let matchedTiles = [];
+
+/*
+ * Layout the tiles
+ */
+function initGame() {
+  for (let i = 0; i < tiles.length; i++) {
+    const card = document.createElement('li');
+    card.classList.add('card');
+    card.innerHTML = `<i class='fa ${tiles[i]}'></i>`;
+    cardsContainer.appendChild(card);
+
+    // Variable for shuffled cards
+  	let mixCards = shuffle(tiles);
+
+    //Add click event each tiles
+    click(card);
+  }
+
+
 }
+
+/*
+ * Click event
+ */
+function click(card) {
+
+  //Event listener upon click
+  card.addEventListener('click', function() {
+
+    const presentTile = this;
+    const previousTile = flippedTiles[0];
+
+    //Existing flipped cards
+    if (flippedTiles.length === 1) {
+
+      card.classList.add('open', 'show', 'disable');
+      flippedTiles.push(this);
+
+      //Compare 2 flipped cards
+      compare(presentTile, previousTile);
+    } else {
+
+      //No flipped cards
+      presentTile.classList.add('open', 'show', 'disable');
+      flippedTiles.push(this);
+
+    }
+  });
+}
+
+/*
+ * Compare 2 tiles
+ */
+function compare(presentTile, previousTile) {
+
+    //Match tiles
+    if (presentTile.innerHTML === previousTile.innerHTML) {
+    presentTile.classList.add('match');
+    previousTile.classList.add('match');
+
+    matchedTiles.push(presentTile, previousTile);
+
+    flippedTiles = [];
+
+    //Check if game is OVER
+    gameOver();
+
+  } else {
+
+    setTimeout(function() {
+      presentTile.classList.remove('open', 'show', 'disable');
+      previousTile.classList.remove('open', 'show', 'disable');
+      flippedTiles = [];
+    }, 500);
+  }
+    // Count new move
+      countMove();
+}
+
+/*
+ * Is the game over?
+ */
+function gameOver() {
+  if (matchedTiles.length === tiles.length) {
+    alert('GAME OVER, MAN!')
+  }
+}
+
+/*
+ * Reset the game
+ */
+const resetBtn = document.querySelector('.restart');
+resetBtn.addEventListener('click', function() {
+  // Delete all flippedTiles
+    cardsContainer.innerHTML = '';
+
+  // call init to create new deck
+  initGame();
+
+  // Reset variables
+  matchedTiles = [];
+  moves = 0;
+  movesContainer.innerHTML = 0;
+});
+
+/*
+ * Move counter
+ */
+const movesContainer = document.querySelector('.moves');
+let moves = 0;
+movesContainer.innerHTML = 0;
+function countMove() {
+    moves++;
+    movesContainer.innerHTML = moves;
+}
+
+
+/*
+ * Start the game!
+ */
+initGame();
+
+
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -24,7 +147,7 @@ function produceCard(card) {
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-  let currentIndex = array.length,
+  var currentIndex = array.length,
     temporaryValue, randomIndex;
 
   while (currentIndex !== 0) {
@@ -37,65 +160,3 @@ function shuffle(array) {
 
   return array;
 }
-
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
-
-function triggerGame() {
-  let deck = document.querySelector('.deck')
-  let cardHTML = shuffle(cards).map(function(card) {
-    return produceCard(card);
-  });
-
-  deck.innerHTML = cardHTML.join('');
-}
-
-triggerGame();
-
-let allCards = document.querySelectorAll('.card');
-let openCards = [];
-
-allCards.forEach(function(card) {
-  card.addEventListener('click', function(e) {
-
-    if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match')) {
-      openCards.push(card);
-      card.classList.add('open', 'show');
-
-      //If cards match, leave cards open
-      if (openCards.length == 2) {
-        if (openCards[0].dataset.card == openCards[1].dataset.card) {
-            console.log('This is a match');
-          openCards[0].classList.add('match');
-          openCards[0].classList.add('open');
-          openCards[0].classList.add('show');
-
-          openCards[1].classList.add('match');
-          openCards[1].classList.add('open');
-          openCards[1].classList.add('show');
-
-          openCards = [];
-        }
-        else {
-          //If cards do not match, close cards
-          setTimeout(function() {
-            openCards.forEach(function(card) {
-              card.classList.remove('open', 'show');
-            });
-
-            openCards = [];
-          }, 1000);
-        }
-      }
-    }
-  });
-});
