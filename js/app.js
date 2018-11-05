@@ -119,35 +119,14 @@ function startTimer(){
     },1000);
 }
 
-// @description congratulations when all cards match, show modal and moves, time and rating
-function congratulations(){
-    if (matchedCard.length == 16){
-        clearInterval(interval);
-        finalTime = timer.innerHTML;
-
-        // show congratulations modal
-        modal.classList.add("show");
-
-        // declare star rating variable
-        var starRating = document.querySelector(".stars").innerHTML;
-
-        //showing move, rating, time on modal
-        document.getElementById("finalMove").innerHTML = moves;
-        document.getElementById("starRating").innerHTML = starRating;
-        document.getElementById("totalTime").innerHTML = finalTime;
-
-        //closeicon on modal
-        closeModal();
-    };
-}
-
-
 /*
  * Is the game over?
  */
 function gameOver() {
   if (matchedTiles.length === tiles.length) {
-    alert('Game over, man!')
+    clearInterval(interval);
+    finalTime = timer.innerHTML;
+    alert('Congratulations! You have completed the game.')
   }
 }
 
