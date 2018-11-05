@@ -138,6 +138,10 @@ resetBtn.addEventListener('click', function() {
   // Delete all flippedTiles
     cardsContainer.innerHTML = '';
 
+  // reset ratings  
+    starsRating.innerHTML = `<li><i class="fa fa-star"></i></li>
+          <li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>`;
+
   // call init to create new deck
   initGame();
 
