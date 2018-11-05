@@ -22,7 +22,7 @@ let matchedTiles = [];
 function initGame() {
   // // Variable for shuffled cards
   let mixTiles = shuffle(tiles);
-  
+
   for (let i = 0; i < tiles.length; i++) {
     const card = document.createElement('li');
     card.classList.add('card');
@@ -32,7 +32,13 @@ function initGame() {
     //Add click event each tiles
     click(card);
   }
-
+  //reset timer
+  second = 0;
+  minute = 0;
+  hour = 0;
+  var timer = document.querySelector(".timer");
+  timer.innerHTML = "0 mins 0 secs";
+  clearInterval(interval);
 
 }
 
@@ -94,6 +100,48 @@ function compare(presentTile, previousTile) {
       countMove();
 }
 
+// @description game timer
+var second = 0, minute = 0; hour = 0;
+var timer = document.querySelector(".timer");
+var interval;
+function startTimer(){
+    interval = setInterval(function(){
+        timer.innerHTML = minute+"mins "+second+"secs";
+        second++;
+        if(second == 60){
+            minute++;
+            second=0;
+        }
+        if(minute == 60){
+            hour++;
+            minute = 0;
+        }
+    },1000);
+}
+
+// @description congratulations when all cards match, show modal and moves, time and rating
+function congratulations(){
+    if (matchedCard.length == 16){
+        clearInterval(interval);
+        finalTime = timer.innerHTML;
+
+        // show congratulations modal
+        modal.classList.add("show");
+
+        // declare star rating variable
+        var starRating = document.querySelector(".stars").innerHTML;
+
+        //showing move, rating, time on modal
+        document.getElementById("finalMove").innerHTML = moves;
+        document.getElementById("starRating").innerHTML = starRating;
+        document.getElementById("totalTime").innerHTML = finalTime;
+
+        //closeicon on modal
+        closeModal();
+    };
+}
+
+
 /*
  * Is the game over?
  */
@@ -129,6 +177,12 @@ movesContainer.innerHTML = 0;
 function countMove() {
     moves++;
     movesContainer.innerHTML = moves;
+    if(moves == 1){
+    second = 0;
+    minute = 0;
+    hour = 0;
+    startTimer();
+  }
 }
 
 
