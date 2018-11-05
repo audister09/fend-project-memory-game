@@ -156,6 +156,7 @@ movesContainer.innerHTML = 0;
 function countMove() {
     moves++;
     movesContainer.innerHTML = moves;
+    rating();
     if(moves == 1){
     second = 0;
     minute = 0;
@@ -164,6 +165,17 @@ function countMove() {
   }
 }
 
+const starsRating = document.querySelector('.stars');
+function rating() {
+  switch(moves) {
+    case 20:
+      starsRating.innerHTML = `<li><i class="fa fa-star"></i></li>
+            <li><i class="fa fa-star"></i></li>`;
+      break;
+    case 25:
+      starsRating.innerHTML = `<li><i class="fa fa-star"></i></li>`;
+  }
+}
 
 /*
  * Start the game!
