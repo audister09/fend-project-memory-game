@@ -45,10 +45,17 @@ function initGame() {
 /*
  * Click event
  */
+let firstClick = true;
+
 function click(card) {
 
   //Event listener upon click
   card.addEventListener('click', function() {
+
+    if (firstClick) {
+      startTimer();
+      firstClick = false;
+    }
 
     const presentTile = this;
     const previousTile = flippedTiles[0];
@@ -61,6 +68,7 @@ function click(card) {
 
       //Compare 2 flipped cards
       compare(presentTile, previousTile);
+
     } else {
 
       //No flipped cards
@@ -76,8 +84,8 @@ function click(card) {
  */
 function compare(presentTile, previousTile) {
 
-    //Match tiles
-    if (presentTile.innerHTML === previousTile.innerHTML) {
+  //Match tiles
+  if (presentTile.innerHTML === previousTile.innerHTML) {
     presentTile.classList.add('match');
     previousTile.classList.add('match');
 
@@ -93,41 +101,77 @@ function compare(presentTile, previousTile) {
     setTimeout(function() {
       presentTile.classList.remove('open', 'show', 'disable');
       previousTile.classList.remove('open', 'show', 'disable');
-      flippedTiles = [];
     }, 500);
   }
-    // Count new move
-      countMove();
+
+  flippedTiles = [];
+
+  // Count new move
+  countMove();
 }
 
 // @description game timer
-var second = 0, minute = 0; hour = 0;
+var second = 0,
+  minute = 0;
+hour = 0;
 var timer = document.querySelector(".timer");
 var interval;
-function startTimer(){
-    interval = setInterval(function(){
-        timer.innerHTML = minute+"mins "+second+"secs";
-        second++;
-        if(second == 60){
-            minute++;
-            second=0;
-        }
-        if(minute == 60){
-            hour++;
-            minute = 0;
-        }
-    },1000);
+
+function startTimer() {
+  interval = setInterval(function() {
+    timer.innerHTML = minute + "mins " + second + "secs";
+    second++;
+    if (second == 60) {
+      minute++;
+      second = 0;
+    }
+    if (minute == 60) {
+      hour++;
+      minute = 0;
+    }
+  }, 1000);
 }
 
 /*
  * Is the game over?
  */
+ // close icon in modal
+ let closeicon = document.querySelector('.close');
+
+ // declare modal
+ let modal = document.getElementById('modal')
+
 function gameOver() {
   if (matchedTiles.length === tiles.length) {
     clearInterval(interval);
     finalTime = timer.innerHTML;
-    alert('Congratulations! You have completed the game.')
-  }
+
+    // display modal
+    modal.classList.add('show');
+
+    let starRating = document.querySelector(".stars").innerHTML;
+    //display move, rating, time on modal
+    document.getElementById('finalMove').innerHTML = moves;
+    document.getElementById('starRating').innerHTML = starRating;
+    document.getElementById('totalTime').innerHTML = finalTime;
+
+    //closeicon on modal
+    closeModal();
+  };
+}
+
+// @description close icon on modal
+function closeModal(){
+    closeicon.addEventListener("click", function(e){
+        modal.classList.remove("show");
+        initGame();
+    });
+}
+
+
+// @desciption for user to play Again
+function playAgain(){
+    modal.classList.remove("show");
 }
 
 /*
@@ -136,10 +180,10 @@ function gameOver() {
 const resetBtn = document.querySelector('.restart');
 resetBtn.addEventListener('click', function() {
   // Delete all flippedTiles
-    cardsContainer.innerHTML = '';
+  cardsContainer.innerHTML = '';
 
-  // reset ratings  
-    starsRating.innerHTML = `<li><i class="fa fa-star"></i></li>
+  // reset ratings
+  starsRating.innerHTML = `<li><i class="fa fa-star"></i></li>
           <li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>`;
 
   // call init to create new deck
@@ -157,11 +201,12 @@ resetBtn.addEventListener('click', function() {
 const movesContainer = document.querySelector('.moves');
 let moves = 0;
 movesContainer.innerHTML = 0;
+
 function countMove() {
-    moves++;
-    movesContainer.innerHTML = moves;
-    rating();
-    if(moves == 1){
+  moves++;
+  movesContainer.innerHTML = moves;
+  rating();
+  if (moves == 1) {
     second = 0;
     minute = 0;
     hour = 0;
@@ -170,8 +215,9 @@ function countMove() {
 }
 
 const starsRating = document.querySelector('.stars');
+
 function rating() {
-  switch(moves) {
+  switch (moves) {
     case 20:
       starsRating.innerHTML = `<li><i class="fa fa-star"></i></li>
             <li><i class="fa fa-star"></i></li>`;
