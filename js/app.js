@@ -135,9 +135,6 @@ function startTimer() {
 /*
  * Is the game over?
  */
- // close icon in modal
- let closeicon = document.querySelector('.close');
-
  // declare modal
  let modal = document.getElementById('modal')
 
@@ -155,25 +152,14 @@ function gameOver() {
     document.getElementById('starRating').innerHTML = starRating;
     document.getElementById('totalTime').innerHTML = finalTime;
 
-    //closeicon on modal
-    closeModal();
   };
 }
-
-// @description close icon on modal
-function closeModal(){
-    closeicon.addEventListener("click", function(e){
-        modal.classList.remove("show");
-        initGame();
-    });
-}
-
 
 // @desciption for user to play Again
 function playAgain(){
     modal.classList.remove("show");
+    resetGame();
 }
-
 /*
  * Reset the game
  */
@@ -194,6 +180,29 @@ resetBtn.addEventListener('click', function() {
   moves = 0;
   movesContainer.innerHTML = 0;
 });
+
+// Game reset for modal
+let resetGame = function() {
+  //resetVariables
+  matchedTiles = [];
+  moves = 0;
+  movesContainer.innerHTML = 0;
+  //resetTimer
+  second = 0;
+  minute = 0;
+  hour = 0;
+  let timer = document.querySelector(".timer");
+  timer.innerHTML = "0 mins 0 secs";
+  clearInterval(interval);
+  // reset ratings
+  starsRating.innerHTML = `<li><i class="fa fa-star"></i></li>
+          <li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>`;
+  // Delete all flippedTiles
+  cardsContainer.innerHTML = '';
+  initGame();
+
+};
+
 
 /*
  * Move counter
@@ -232,13 +241,6 @@ function rating() {
  */
 initGame();
 
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
