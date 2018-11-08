@@ -18,6 +18,12 @@ Make moves on the table of cards by choosing pairs of cards that you think that 
 
 Checkout the actual game here: https://audister09.github.io/memory-game/
 
+# Documentation
+A README file is included detailing the game and all dependencies.
+Comments are present and effectively explain longer code procedure when necessary.
+Code is formatted with consistent, logical, and easy-to-read formatting as described in the Udacity JavaScript Style Guide.
+Font Awesome symbols used for game. Google Fonts Coda and Fascinate Inline used in game.
+
 ## Contributing
 
 This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
