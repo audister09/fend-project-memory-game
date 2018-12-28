@@ -16,7 +16,7 @@ Make moves on the table of cards by choosing pairs of cards that you think that 
 * When the player starts a game, a displayed timer should also start. Once the player wins the game, the timer stops.
 * Game displays the current number of moves a user has made.
 
-Checkout the actual game here: https://audister09.github.io/memory-game/
+Checkout the actual game here: https://rickcosme9.github.io/memory-game/
 
 # Documentation
 A README file is included detailing the game and all dependencies.
